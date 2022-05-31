@@ -10,6 +10,7 @@ const Table = () => {
   const [selectedUsers, setSelectedUsers] = useState([]);
   const [openAddDataModal, setOpenAddDataModal] = useState(false);
   const [openUpdateDataModal, setOpenUpdateModal] = useState(false);
+  const [selectedId, setSelectedId] = useState("");
   const {
     data: users,
     isLoading,
@@ -40,6 +41,11 @@ const Table = () => {
     const data = await res.json();
     console.log(data);
     refetch();
+  };
+
+  const handleUpdateUser = (id) => {
+    setOpenUpdateModal(true);
+    setSelectedId(id);
   };
 
   return (
@@ -98,7 +104,7 @@ const Table = () => {
                     <div className="flex justify-center items-center gap-2">
                       <label
                         htmlFor="updateDataModal"
-                        onClick={() => setOpenUpdateModal(true)}
+                        onClick={() => handleUpdateUser(_id)}
                         className="btn btn-xs bg-green-700 border-green-700 text-slate-100"
                       >
                         Update
@@ -131,7 +137,11 @@ const Table = () => {
       )}
 
       {openUpdateDataModal && (
-        <UpdateDataModal refetch={refetch} setOpenModal={setOpenUpdateModal} />
+        <UpdateDataModal
+          refetch={refetch}
+          setOpenModal={setOpenUpdateModal}
+          selectedId={selectedId}
+        />
       )}
     </>
   );

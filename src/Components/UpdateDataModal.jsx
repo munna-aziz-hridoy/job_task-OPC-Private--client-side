@@ -1,7 +1,7 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 
-const UpdateDataModal = ({ refetch, setOpenModal }) => {
+const UpdateDataModal = ({ refetch, setOpenModal, selectedId }) => {
   const {
     register,
     handleSubmit,
@@ -10,13 +10,16 @@ const UpdateDataModal = ({ refetch, setOpenModal }) => {
   } = useForm();
 
   const handleUpdateData = async (inputData) => {
-    const res = await fetch("http://localhost:5000/updateUser", {
-      method: "PATCH",
-      headers: {
-        "content-type": "application/json",
-      },
-      body: JSON.stringify(inputData),
-    });
+    const res = await fetch(
+      `http://localhost:5000/updateUser?id=${selectedId}`,
+      {
+        method: "PATCH",
+        headers: {
+          "content-type": "application/json",
+        },
+        body: JSON.stringify(inputData),
+      }
+    );
     const data = await res.json();
     console.log(data);
     reset();
