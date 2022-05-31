@@ -4,10 +4,12 @@ import React, { useState } from "react";
 import AddDataModal from "./AddDataModal";
 import { useQuery } from "react-query";
 import Spinner from "./Spinner";
+import UpdateDataModal from "./UpdateDataModal";
 
 const Table = () => {
   const [selectedUsers, setSelectedUsers] = useState([]);
-  const [openModal, setOpenModal] = useState(false);
+  const [openAddDataModal, setOpenAddDataModal] = useState(false);
+  const [openUpdateDataModal, setOpenUpdateModal] = useState(false);
   const {
     data: users,
     isLoading,
@@ -32,12 +34,20 @@ const Table = () => {
 
   const handleSendEmail = () => {};
 
+  const handleDeleteUser = async (id) => {
+    const url = `http://localhost:5000/deleteUser?id=${id}`;
+    const res = await fetch(url, { method: "DELETE" });
+    const data = await res.json();
+    console.log(data);
+    refetch();
+  };
+
   return (
     <>
       <div className="flex justify-end items-center my-5">
         <label
           for="addDataModal"
-          onClick={() => setOpenModal(true)}
+          onClick={() => setOpenAddDataModal(true)}
           className="btn btn-outline  flex justify-center items-center gap-2 border-2 rounded-lg shadow-lg hover:text-white px-4"
         >
           <FontAwesomeIcon className="text-2xl" icon={faPlusSquare} />
@@ -86,10 +96,17 @@ const Table = () => {
                   </td>
                   <th>
                     <div className="flex justify-center items-center gap-2">
-                      <button className="btn btn-xs bg-green-700 border-green-700 text-slate-100">
+                      <label
+                        htmlFor="updateDataModal"
+                        onClick={() => setOpenUpdateModal(true)}
+                        className="btn btn-xs bg-green-700 border-green-700 text-slate-100"
+                      >
                         Update
-                      </button>
-                      <button className="btn btn-xs bg-red-700 border-red-700 text-slate-100">
+                      </label>
+                      <button
+                        onClick={() => handleDeleteUser(_id)}
+                        className="btn btn-xs bg-red-700 border-red-700 text-slate-100"
+                      >
                         delete
                       </button>
                     </div>
@@ -109,8 +126,12 @@ const Table = () => {
           <span>send information</span>
         </button>
       </div>
-      {openModal && (
-        <AddDataModal refetch={refetch} setOpenModal={setOpenModal} />
+      {openAddDataModal && (
+        <AddDataModal refetch={refetch} setOpenModal={setOpenAddDataModal} />
+      )}
+
+      {openUpdateDataModal && (
+        <UpdateDataModal refetch={refetch} setOpenModal={setOpenUpdateModal} />
       )}
     </>
   );
