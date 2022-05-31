@@ -1,12 +1,18 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPaperPlane, faPlusSquare } from "@fortawesome/free-solid-svg-icons";
-import React from "react";
+import React, { useState } from "react";
 import AddDataModal from "./AddDataModal";
 import { useQuery } from "react-query";
 import Spinner from "./Spinner";
 
 const Table = () => {
-  const { data: users, isLoading } = useQuery("users", () => {
+  const [selectedUsers, setSelectedUsers] = useState([]);
+  const [openModal, setOpenModal] = useState(false);
+  const {
+    data: users,
+    isLoading,
+    refetch,
+  } = useQuery("users", () => {
     return fetch("http://localhost:5000/allUser").then((res) => res.json());
   });
 
@@ -14,11 +20,24 @@ const Table = () => {
     return <Spinner />;
   }
 
+  const handleSelectUser = (event, id) => {
+    if (event.target.checked) {
+      setSelectedUsers([...selectedUsers, id]);
+    }
+    if (!event.target.checked) {
+      const restUser = selectedUsers.filter((userId) => userId !== id);
+      setSelectedUsers(restUser);
+    }
+  };
+
+  const handleSendEmail = () => {};
+
   return (
     <>
       <div className="flex justify-end items-center my-5">
         <label
           for="addDataModal"
+          onClick={() => setOpenModal(true)}
           className="btn btn-outline  flex justify-center items-center gap-2 border-2 rounded-lg shadow-lg hover:text-white px-4"
         >
           <FontAwesomeIcon className="text-2xl" icon={faPlusSquare} />
@@ -45,10 +64,14 @@ const Table = () => {
                 <tr key={_id}>
                   <th>
                     <label>
-                      <input type="checkbox" className="checkbox" />
+                      <input
+                        type="checkbox"
+                        className="checkbox"
+                        onChange={(event) => handleSelectUser(event, _id)}
+                      />
                     </label>
                   </th>
-                  <td>{index + 1}</td>
+                  <td className="font-bold">{index + 1}</td>
                   <td>
                     <p className="font-bold">{name}</p>
                   </td>
@@ -78,12 +101,17 @@ const Table = () => {
         </table>
       </div>
       <div className="flex justify-end items-center mt-10">
-        <button className="btn btn-outline  flex justify-center items-center gap-2 border-2 rounded-lg shadow-lg hover:text-white px-4">
+        <button
+          onClick={handleSendEmail}
+          className="btn btn-outline  flex justify-center items-center gap-2 border-2 rounded-lg shadow-lg hover:text-white px-4"
+        >
           <FontAwesomeIcon className="text-2xl" icon={faPaperPlane} />
           <span>send information</span>
         </button>
       </div>
-      <AddDataModal />
+      {openModal && (
+        <AddDataModal refetch={refetch} setOpenModal={setOpenModal} />
+      )}
     </>
   );
 };

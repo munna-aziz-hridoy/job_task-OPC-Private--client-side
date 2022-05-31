@@ -1,7 +1,7 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 
-const AddDataModal = () => {
+const AddDataModal = ({ refetch, setOpenModal }) => {
   const {
     register,
     handleSubmit,
@@ -9,8 +9,19 @@ const AddDataModal = () => {
     formState: { errors },
   } = useForm();
 
-  const handleAddData = (inputData) => {
-    console.log(inputData);
+  const handleAddData = async (inputData) => {
+    const res = await fetch("http://localhost:5000/addUser", {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify(inputData),
+    });
+    const data = await res.json();
+    console.log(data);
+    reset();
+    refetch();
+    setOpenModal(false);
   };
 
   return (
