@@ -33,7 +33,17 @@ const Table = () => {
     }
   };
 
-  const handleSendEmail = () => {};
+  const handleSendEmail = async () => {
+    const res = await fetch("http://localhost:5000/sendEmail", {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify({ ids: selectedUsers }),
+    });
+    const data = await res.json();
+    console.log(data);
+  };
 
   const handleDeleteUser = async (id) => {
     const url = `http://localhost:5000/deleteUser?id=${id}`;
