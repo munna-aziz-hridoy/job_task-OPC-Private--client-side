@@ -13,7 +13,9 @@ const Table = () => {
   const [openUpdateDataModal, setOpenUpdateModal] = useState(false);
   const [selectedId, setSelectedId] = useState("");
   const { data, isLoading, refetch } = useQuery("users", () => {
-    return fetch("https://evening-peak-26972.herokuapp.com/allUser").then((res) => res.json());
+    return fetch("https://evening-peak-26972.herokuapp.com/allUser").then(
+      (res) => res.json()
+    );
   });
 
   if (isLoading) {
@@ -31,13 +33,16 @@ const Table = () => {
   };
 
   const handleSendEmail = async () => {
-    const res = await fetch("https://evening-peak-26972.herokuapp.com/sendEmail", {
-      method: "POST",
-      headers: {
-        "content-type": "application/json",
-      },
-      body: JSON.stringify({ ids: selectedUsers }),
-    });
+    const res = await fetch(
+      "https://evening-peak-26972.herokuapp.com/sendEmail",
+      {
+        method: "POST",
+        headers: {
+          "content-type": "application/json",
+        },
+        body: JSON.stringify({ ids: selectedUsers }),
+      }
+    );
     const data = await res.json();
     if (data?.success) {
       toast.success("Successfully sent data to the email ");
