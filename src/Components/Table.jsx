@@ -5,17 +5,14 @@ import AddDataModal from "./AddDataModal";
 import { useQuery } from "react-query";
 import Spinner from "./Spinner";
 import UpdateDataModal from "./UpdateDataModal";
+import { toast } from "react-toastify";
 
 const Table = () => {
   const [selectedUsers, setSelectedUsers] = useState([]);
   const [openAddDataModal, setOpenAddDataModal] = useState(false);
   const [openUpdateDataModal, setOpenUpdateModal] = useState(false);
   const [selectedId, setSelectedId] = useState("");
-  const {
-    data: users,
-    isLoading,
-    refetch,
-  } = useQuery("users", () => {
+  const { data, isLoading, refetch } = useQuery("users", () => {
     return fetch("http://localhost:5000/allUser").then((res) => res.json());
   });
 
@@ -42,15 +39,22 @@ const Table = () => {
       body: JSON.stringify({ ids: selectedUsers }),
     });
     const data = await res.json();
-    console.log(data);
+    if (data?.success) {
+      toast.success("Successfully sent data to the email ");
+    }
   };
 
   const handleDeleteUser = async (id) => {
+    const confirmDelete = window.confirm("Are you sure you want to delete");
+    if (!confirmDelete) return;
     const url = `http://localhost:5000/deleteUser?id=${id}`;
     const res = await fetch(url, { method: "DELETE" });
     const data = await res.json();
-    console.log(data);
+
     refetch();
+    if (data?.success) {
+      toast.error("Successfully remove data");
+    }
   };
 
   const handleUpdateUser = (id) => {
@@ -62,7 +66,7 @@ const Table = () => {
     <>
       <div className="flex justify-end items-center my-5">
         <label
-          for="addDataModal"
+          htmlFor="addDataModal"
           onClick={() => setOpenAddDataModal(true)}
           className="btn btn-outline  flex justify-center items-center gap-2 border-2 rounded-lg shadow-lg hover:text-white px-4"
         >
@@ -84,7 +88,7 @@ const Table = () => {
             </tr>
           </thead>
           <tbody>
-            {users?.map((user, index) => {
+            {data?.users?.map((user, index) => {
               const { _id, name, email, hobbies, phone } = user;
               return (
                 <tr key={_id}>

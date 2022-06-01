@@ -1,5 +1,6 @@
 import React from "react";
 import { useForm } from "react-hook-form";
+import { toast } from "react-toastify";
 
 const UpdateDataModal = ({ refetch, setOpenModal, selectedId }) => {
   const {
@@ -21,44 +22,47 @@ const UpdateDataModal = ({ refetch, setOpenModal, selectedId }) => {
       }
     );
     const data = await res.json();
-    console.log(data);
+
     reset();
     refetch();
     setOpenModal(false);
+    if (data?.success) {
+      toast.success("Successfully updated data");
+    }
   };
 
   return (
     <div>
-      <input type="checkbox" id="updateDataModal" class="modal-toggle" />
-      <div class="modal modal-bottom sm:modal-middle">
-        <div class="modal-box bg-white">
+      <input type="checkbox" id="updateDataModal" className="modal-toggle" />
+      <div className="modal modal-bottom sm:modal-middle">
+        <div className="modal-box bg-white">
           <label
-            for="updateDataModal"
-            class="btn btn-sm btn-circle absolute right-2 top-2"
+            htmlFor="updateDataModal"
+            className="btn btn-sm btn-circle absolute right-2 top-2"
           >
             X
           </label>
-          <h3 class="font-bold text-lg text-center">Update Data</h3>
+          <h3 className="font-bold text-lg text-center">Update Data</h3>
           <form
             onSubmit={handleSubmit(handleUpdateData)}
             className="p-4 my-6 w-full"
           >
-            <label class="label">
-              <span class="label-text">Name</span>
+            <label className="label">
+              <span className="label-text">Name</span>
             </label>
             <input
               type="text"
               placeholder="Name Here"
               {...register("name", { required: "Please enter a name" })}
-              class="input bg-transparent shadow w-full "
+              className="input bg-transparent shadow w-full "
             />
             {errors.name && (
               <p className="text-red-300 text-xs my-2">
                 {errors?.name.message}
               </p>
             )}
-            <label class="label">
-              <span class="label-text">Email</span>
+            <label className="label">
+              <span className="label-text">Email</span>
             </label>
             <input
               type="text"
@@ -71,15 +75,15 @@ const UpdateDataModal = ({ refetch, setOpenModal, selectedId }) => {
                 },
               })}
               placeholder="Email Here"
-              class="input bg-transparent shadow  w-full "
+              className="input bg-transparent shadow  w-full "
             />
             {errors.email && (
               <p className="text-red-300 text-xs my-2">
                 {errors?.email.message}
               </p>
             )}
-            <label class="label">
-              <span class="label-text">Phone</span>
+            <label className="label">
+              <span className="label-text">Phone</span>
             </label>
             <input
               type="number"
@@ -87,21 +91,21 @@ const UpdateDataModal = ({ refetch, setOpenModal, selectedId }) => {
                 required: "Please enter a phone number",
               })}
               placeholder="Phone Here"
-              class="input bg-transparent shadow  w-full "
+              className="input bg-transparent shadow  w-full "
             />
             {errors.phone && (
               <p className="text-red-300 text-xs my-2">
                 {errors?.phone.message}
               </p>
             )}
-            <label class="label">
-              <span class="label-text">Hobbies</span>
+            <label className="label">
+              <span className="label-text">Hobbies</span>
             </label>
             <input
               type="text"
               {...register("hobbies", { required: "What is your hobbies?" })}
               placeholder="Hobbies"
-              class="input bg-transparent shadow  w-full "
+              className="input bg-transparent shadow  w-full "
             />
             {errors.hobbies && (
               <p className="text-red-300 text-xs my-2">
