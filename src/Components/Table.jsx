@@ -33,6 +33,10 @@ const Table = () => {
   };
 
   const handleSendEmail = async () => {
+    if (selectedUsers.length < 1) {
+      return toast.error("Please select at least one row");
+    }
+
     const res = await fetch(
       "https://evening-peak-26972.herokuapp.com/sendEmail",
       {
