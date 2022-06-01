@@ -12,7 +12,7 @@ const UpdateDataModal = ({ refetch, setOpenModal, selectedId }) => {
 
   const handleUpdateData = async (inputData) => {
     const res = await fetch(
-      `http://localhost:5000/updateUser?id=${selectedId}`,
+      `https://evening-peak-26972.herokuapp.com/updateUser?id=${selectedId}`,
       {
         method: "PATCH",
         headers: {

@@ -11,13 +11,16 @@ const AddDataModal = ({ refetch, setOpenModal }) => {
   } = useForm();
 
   const handleAddData = async (inputData) => {
-    const res = await fetch("http://localhost:5000/addUser", {
-      method: "POST",
-      headers: {
-        "content-type": "application/json",
-      },
-      body: JSON.stringify(inputData),
-    });
+    const res = await fetch(
+      "https://evening-peak-26972.herokuapp.com/addUser",
+      {
+        method: "POST",
+        headers: {
+          "content-type": "application/json",
+        },
+        body: JSON.stringify(inputData),
+      }
+    );
     const data = await res.json();
     if (!data?.success) {
       return toast.error(data?.message);

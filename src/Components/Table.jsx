@@ -13,7 +13,7 @@ const Table = () => {
   const [openUpdateDataModal, setOpenUpdateModal] = useState(false);
   const [selectedId, setSelectedId] = useState("");
   const { data, isLoading, refetch } = useQuery("users", () => {
-    return fetch("http://localhost:5000/allUser").then((res) => res.json());
+    return fetch("https://evening-peak-26972.herokuapp.com/allUser").then((res) => res.json());
   });
 
   if (isLoading) {
@@ -31,7 +31,7 @@ const Table = () => {
   };
 
   const handleSendEmail = async () => {
-    const res = await fetch("http://localhost:5000/sendEmail", {
+    const res = await fetch("https://evening-peak-26972.herokuapp.com/sendEmail", {
       method: "POST",
       headers: {
         "content-type": "application/json",
@@ -47,7 +47,7 @@ const Table = () => {
   const handleDeleteUser = async (id) => {
     const confirmDelete = window.confirm("Are you sure you want to delete");
     if (!confirmDelete) return;
-    const url = `http://localhost:5000/deleteUser?id=${id}`;
+    const url = `https://evening-peak-26972.herokuapp.com/deleteUser?id=${id}`;
     const res = await fetch(url, { method: "DELETE" });
     const data = await res.json();
 
